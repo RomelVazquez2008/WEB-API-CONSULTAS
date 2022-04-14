@@ -17,6 +17,22 @@ pool.getConnection((err,connection)=> {
     connection.release();
   });
 
-module.exports = pool;
+
+  //ojo aqui
+const querypromise = (sql) => {
+    return new Promise( (resolve, reject) => {
+        pool.query(sql, (error, elements) =>{
+            if (error){
+                return reject(error)
+            }
+            return resolve(elements)
+        })
+    })
+}
+
+module.exports = {
+    pool,
+    querypromise
+}
 
 

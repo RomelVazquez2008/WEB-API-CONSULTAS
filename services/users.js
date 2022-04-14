@@ -1,20 +1,64 @@
-const pool = require('../config/db.js');
+const dbService = require('../config/db.js');
 
 const getAllUsers =  () => {
 
-    sql = 'SELECT * FROM kpis'
+    sql = 'SELECT * FROM usuario'
     
-    return new Promise((resolve, reject)=>{
-        pool.query(sql,  (error, elements)=>{
-            if(error){
-                return reject(error);
-            }
-            return resolve(elements);
-        });
-    });
+    return dbService.querypromise(sql)
 
 }
 
+const getUser =  (id) => {
+
+    sql = `SELECT * 
+            FROM usuario
+            WHERE IdUsuario = ${id}`
+    
+    return dbService.querypromise(sql)
+
+}
+
+const addUser =  (body) => {
+
+    const {IdUsuario, Nombre, Apellido, Foto} = body
+
+    sql = ` INSERT INTO usuario(IdUsuario, Nombre, Apellido, Foto) 
+            VALUES(${IdUsuario}, '${Nombre}', '${Apellido}', '${Foto}')`
+    
+    return dbService.querypromise(sql)
+
+}
+
+const updateUser =  (id, body) => {
+
+    const {Nombre, Apellido, Foto} = body
+
+    sql = ` UPDATE usuario
+                SET Nombre =  '${Nombre}',
+                    Apellido = '${Apellido}',
+                    Foto = '${Foto}'
+            WHERE IdUsuario = ${id}
+            `
+    
+    return dbService.querypromise(sql)
+
+}
+
+const deleteUser =  (id) => {
+
+    sql = `DELETE FROM usuario
+            WHERE IdUsuario = ${id}
+            `
+    
+    return dbService.querypromise(sql)
+
+}
+
+
 module.exports = {
-    getAllUsers
+    getAllUsers,
+    getUser,
+    addUser,
+    updateUser,
+    deleteUser
 }
